@@ -13,6 +13,8 @@
 - [react-native-config](https://github.com/luggit/react-native-config) to manage envionments.
 - [react-navigation](https://reactnavigation.org/) navigation library.
 - [react-native-voice/voice](https://www.npmjs.com/package/@react-native-voice/voice) A speech-to-text library for React Native.
+- [react-native-sound](https://www.npmjs.com/package/react-native-sound) React Native module for playing sound clips on iOS, Android, and Windows.
+- [rn-fetch-blob](https://www.npmjs.com/package/rn-fetch-blob) A File download library for React Native.
 
 After that you should proceed as with any javascript project:
 
