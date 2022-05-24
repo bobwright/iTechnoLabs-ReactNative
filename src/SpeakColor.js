@@ -17,15 +17,15 @@ import Voice, {
 } from '@react-native-voice/voice';
 
 function SpeakColor(props) {
-  const { navigation, route } = props;
-//const SpeakColor = () => {
+  const {navigation, route} = props;
+  //const SpeakColor = () => {
   const [pitch, setPitch] = useState('');
   const [error, setError] = useState('');
   const [end, setEnd] = useState('');
   const [started, setStarted] = useState('');
   const [results, setResults] = useState([]);
   const [partialResults, setPartialResults] = useState([]);
- 
+
   useEffect(() => {
     //Setting callbacks for the process status
     Voice.onSpeechStart = onSpeechStart;
@@ -34,49 +34,49 @@ function SpeakColor(props) {
     Voice.onSpeechResults = onSpeechResults;
     Voice.onSpeechPartialResults = onSpeechPartialResults;
     Voice.onSpeechVolumeChanged = onSpeechVolumeChanged;
- 
+
     return () => {
       //destroy the process after switching the screen
       Voice.destroy().then(Voice.removeAllListeners);
     };
   }, []);
- 
-  const onSpeechStart = (e) => {
+
+  const onSpeechStart = e => {
     //Invoked when .start() is called without error
     console.log('onSpeechStart: ', e);
     setStarted('√');
   };
- 
-  const onSpeechEnd = (e) => {
+
+  const onSpeechEnd = e => {
     //Invoked when SpeechRecognizer stops recognition
     console.log('onSpeechEnd: ', e);
     setEnd('√');
   };
- 
-  const onSpeechError = (e) => {
+
+  const onSpeechError = e => {
     //Invoked when an error occurs.
     console.log('onSpeechError: ', e);
     setError(JSON.stringify(e.error));
   };
- 
-  const onSpeechResults = (e) => {
+
+  const onSpeechResults = e => {
     //Invoked when SpeechRecognizer is finished recognizing
     console.log('onSpeechResults: ', e);
     setResults(e.value);
   };
- 
-  const onSpeechPartialResults = (e) => {
+
+  const onSpeechPartialResults = e => {
     //Invoked when any results are computed
     console.log('onSpeechPartialResults: ', e);
     setPartialResults(e.value);
   };
- 
-  const onSpeechVolumeChanged = (e) => {
+
+  const onSpeechVolumeChanged = e => {
     //Invoked when pitch that is recognized changed
     console.log('onSpeechVolumeChanged: ', e);
     setPitch(e.value);
   };
- 
+
   const startRecognizing = async () => {
     //Starts listening for speech for a specific locale
     try {
@@ -92,7 +92,7 @@ function SpeakColor(props) {
       console.error(e);
     }
   };
- 
+
   const stopRecognizing = async () => {
     //Stops listening for speech
     try {
@@ -102,7 +102,7 @@ function SpeakColor(props) {
       console.error(e);
     }
   };
- 
+
   const destroyRecognizer = async () => {
     //Destroys the current SpeechRecognizer instance
     try {
@@ -118,52 +118,54 @@ function SpeakColor(props) {
       console.error(e);
     }
   };
- 
+
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.container}>
-          <TouchableHighlight style={{backgroundColor:partialResults.length>0?partialResults[0].replace(/ /g,''):'gray',padding:10,width:Dimensions.get('window').width-20,margin:20,alignItems:'center',borderRadius:10}}>
-            <Text style={{color:'black'}}>Color Button</Text>
-          </TouchableHighlight>
-       <Text style={styles.textStyle}>
-       Press mike and speak color name  to change Button color.
-        </Text> 
-        
-        <View style={styles.headerContainer}>
-        
-          <Text style={styles.textWithSpaceStyle}>
-            {`Started: ${started}`}
-          </Text>
-          <Text style={styles.textWithSpaceStyle}>
-            {`End: ${end}`}
-          </Text>
-        </View>
-       <View style={styles.headerContainer}>
-          {/* <Text style={styles.textWithSpaceStyle}>
+    <View style={styles.container}>
+      <TouchableHighlight
+        style={{
+          backgroundColor:
+            partialResults.length > 0
+              ? partialResults[0].replace(/ /g, '')
+              : 'gray',
+          padding: 10,
+          width: Dimensions.get('window').width - 20,
+          margin: 20,
+          alignItems: 'center',
+          borderRadius: 10,
+        }}
+      >
+        <Text style={{color: 'black'}}>Color Button</Text>
+      </TouchableHighlight>
+      <Text style={styles.textStyle}>
+        Press mike and speak color name to change Button color.
+      </Text>
+
+      <View style={styles.headerContainer}>
+        <Text style={styles.textWithSpaceStyle}>{`Started: ${started}`}</Text>
+        <Text style={styles.textWithSpaceStyle}>{`End: ${end}`}</Text>
+      </View>
+      <View style={styles.headerContainer}>
+        {/* <Text style={styles.textWithSpaceStyle}>
             {`Pitch: \n ${pitch}`}
           </Text> */}
-          <Text style={styles.textWithSpaceStyle}>
-            { error &&`Error: \n ${error}`}
-          </Text>
-        </View> 
-        <TouchableHighlight onPress={startRecognizing}>
-            <Image    style={styles.imageButton} source={require('./button.png')} />
-        </TouchableHighlight>
-        <Text style={styles.textStyle}>
-          Speak Results
+        <Text style={styles.textWithSpaceStyle}>
+          {error && `Error: \n ${error}`}
         </Text>
-        <ScrollView>
-          {partialResults.map((result, index) => {
-            return (
-              <Text
-                key={`partial-result-${index}`}
-                style={styles.textStyle}>
-                {result.replace(/ /g,'')}
-              </Text>
-            );
-          })}
-        </ScrollView>
-        {/* <Text style={styles.textStyle}>
+      </View>
+      <TouchableHighlight onPress={startRecognizing}>
+        <Image style={styles.imageButton} source={require('./button.png')} />
+      </TouchableHighlight>
+      <Text style={styles.textStyle}>Speak Results</Text>
+      <ScrollView>
+        {partialResults.map((result, index) => {
+          return (
+            <Text key={`partial-result-${index}`} style={styles.textStyle}>
+              {result.replace(/ /g, '')}
+            </Text>
+          );
+        })}
+      </ScrollView>
+      {/* <Text style={styles.textStyle}>
           Results
         </Text>
         <ScrollView style={{marginBottom: 42}}>
@@ -177,34 +179,31 @@ function SpeakColor(props) {
             );
           })}
         </ScrollView> */}
-        <View style={styles.horizontalView}>
-          <TouchableHighlight
-            onPress={stopRecognizing}
-            style={styles.buttonStyle}>
-            <Text style={styles.buttonTextStyle}>
-              Stop
-            </Text>
-          </TouchableHighlight>
-          {/* <TouchableHighlight
+      <View style={styles.horizontalView}>
+        <TouchableHighlight
+          onPress={stopRecognizing}
+          style={styles.buttonStyle}
+        >
+          <Text style={styles.buttonTextStyle}>Stop</Text>
+        </TouchableHighlight>
+        {/* <TouchableHighlight
             onPress={cancelRecognizing}
             style={styles.buttonStyle}>
             <Text style={styles.buttonTextStyle}>
               Cancel
             </Text>
           </TouchableHighlight> */}
-          <TouchableHighlight
-            onPress={destroyRecognizer}
-            style={styles.buttonStyle}>
-            <Text style={styles.buttonTextStyle}>
-              Reset Audio
-            </Text>
-          </TouchableHighlight>
-        </View>
+        <TouchableHighlight
+          onPress={destroyRecognizer}
+          style={styles.buttonStyle}
+        >
+          <Text style={styles.buttonTextStyle}>Reset Audio</Text>
+        </TouchableHighlight>
       </View>
-    </SafeAreaView>
+    </View>
   );
-};
- 
+}
+
 //const Stack = createNativeStackNavigator();
 
 // function App() {
@@ -227,7 +226,7 @@ function SpeakColor(props) {
 // }
 
 export default SpeakColor;
- 
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -266,7 +265,6 @@ const styles = StyleSheet.create({
   textStyle: {
     textAlign: 'center',
     padding: 12,
-   
   },
   imageButton: {
     width: 50,
